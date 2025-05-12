@@ -2,7 +2,7 @@
 <img src="https://i.imgur.com/pU5A58S.png" alt="Microsoft Active Directory Logo"/>
 </p>
 
-<h1>Creating a Virtual Network in Microsoft Azure </h1>
+<h1>Creating a Active Direcotry Enviornment in Azure </h1>
 This tutorial outlines the implementation of creating a Virtual Network and Virtual Machines in Azure. I will be creating a setup for a one server and client Active Directory Lab.<br />
 
 
@@ -10,6 +10,8 @@ This tutorial outlines the implementation of creating a Virtual Network and Virt
 
 - Microsoft Azure (Virtual Machines/Compute)
 - Remote Desktop
+- Domain Name Services
+- Active Directory Domain Services
 
 
 <h2>Operating Systems Used </h2>
@@ -46,7 +48,7 @@ This tutorial outlines the implementation of creating a Virtual Network and Virt
 <img src="https://i.imgur.com/ODYTboY.png" alt="Create a RG 3"/>
 
 
-<p> Now we are going to create a Virtual Network, this will allow out VM’s to talk to each other, again this can be done while creating the virtual machines but I will show you how to do it manually. on the home page, select Virtual Networks or type it in the search at the top. </p>
+<p> Now we are going to create a Virtual Network, this will allow our VM’s to talk to each other, again this can be done while creating the virtual machines but I will show you how to do it manually. on the home page, select Virtual Networks or type it in the search at the top. </p>
 
 <p> On the Create virtual network screen be sure the ADDS_Lab resource group is selected, we are going to name this Virtual Network “ADVNET”, again we are sticking with West US2 as the region. I am not going to mess with the settings on the following screen so I will select review and create, then create. you will get to a screen that says “your deployment is complete” </p>
 <img src="https://i.imgur.com/EJe3KVN.png" alt="VNET1"/>
@@ -55,10 +57,10 @@ This tutorial outlines the implementation of creating a Virtual Network and Virt
 
 
 <p> Now we are going to create our virtual machines. On the home page select Virtual Machines then select create, a drop-down menu will come up. Select “Azure Virtual Machine” </p>
-<p> On the next screen use the drop-down menu on resource group to ADDS_Lab. Name the VM DC-1, we are going to select the region as “West US 2”.  For the image select windows server 2022. I have had an issue where I cannot select the size of the virtual machine and get an error. To get around this I select “Azure selected zone (preview) and I can select s size. I am going to do at least 2 vcpus. While doing the labs for Course Careers I made the mistake of selecting 1 vcpu and that was very slow. Be sure to only select 2 if you are on the trial plan as you have a limit of 4 vcpus. I made the error of selecting 4 while setting this up and had to repeat the process for the username and password I am going to have a username of LabUSER and a password of CyberLab1234. Select Next, then Next again to get to network. </p>
+<p> On the next screen use the drop-down menu on resource group to ADDS_Lab. Name the VM DC-1, we are going to select the region as “West US 2”.  For the image select windows server 2022. I have had an issue where I cannot select the size of the virtual machine and get an error. To get around this I select “Azure selected zone (preview) and I can select s size. I am going to do at least 2 vcpus. While doing the labs for Course Careers I made the mistake of selecting 1 vcpu and that was very slow. Be sure to only select 2 if you are on the trial plan as you have a limit of 4 vcpus. I made the error of selecting 4 while setting this up and had to repeat the process. For the username and password I am going to have a username of LabUSER and a password of CyberLab1234. Select Next, then Next again to get to network. </p>
 <p> On the Networking tab make sure the virtual network is set to ADVNET. Click on review and create. If validation passes go ahead and click create. This may take some time but once your screen gets to deployment in process repeat the process except select windows 10 and name it “Client-1”. Be sure to keep it on the same resource group and virtual network. The windows 10 VM will require you to confirm licensing. Be sure to check this box at the bottom or the validation will fail. </p>
 
-<p> Now that both VM’s are created we are going a few things., first we are going to get the public IP address of both VMs. This is found under virtual machines, and displayed with the VM These will be used in remote desktop to connect to the VM 
+<p> Now that both VM’s are created we are going to do a few things., first we are going to get the public IP address of both VMs. This is found under virtual machines, and displayed with the VM These will be used in remote desktop to connect to the VM 
  <ul>
   <li>Server – 20.9.133.119 </li>
   <li>Client – 52.233.82.250</li> </ul> </p>
@@ -78,7 +80,7 @@ This tutorial outlines the implementation of creating a Virtual Network and Virt
 <img src="https://i.imgur.com/VX2hh13.png" alt="RDP"/>
 <img src="https://i.imgur.com/5dEZF90.png" alt="RDP"/>
 
-<p> Now we are going into the windows server VM.  Go to the command prompt or PowerShell by searching CMD or PowerShell on the start menu. Type ipconfig and find the local IP address. This is under IPV4. We have an IP address of 10.0.0.5. now go into azure. And select Client1 under virtual machines. On the side panel expand networking and select network settings. Click on network interface / IP address. on the side panel you will see DNS servers under settings. Select this and select custom add the IP address of the DC-1. This is so the client will look to the server for DNS, which is required for the domain, once that is done click save. restart the VM by going to virtual machines page select Client1. Confirm yes to restart the VM, your remote desktop session should be kicked off. That is normal. We only went in to get the lengthy setup complete. When it is complete log back into the VM and go to PowerShell. Type ipconfig /all to verify the DNS is pointing to the server. We are all done setting up azure. The next section will go over how to setup a domain controller </p>
+<p> Now we are going into the windows server VM.  Go to the command prompt or PowerShell by searching CMD or PowerShell on the start menu. Type ipconfig and find the local IP address. This is under IPV4. We have an IP address of 10.0.0.5. now go into azure. And select Client1 under virtual machines. On the side panel expand networking and select network settings. Click on network interface / IP address. on the side panel you will see DNS servers under settings. Select this and select custom. add the IP address of the DC-1. This is so the client will look to the server for DNS, which is required for the domain, once that is done click save. restart the VM by going to virtual machines page select Client1. Confirm yes to restart the VM, your remote desktop session should be kicked off. That is normal. We only went in to get the lengthy setup complete. When it is complete log back into the VM and go to PowerShell. Type ipconfig /all to verify the DNS is pointing to the server. We are all done setting up azure. The next section will go over how to setup a domain controller </p>
 <img src="https://i.imgur.com/dYcMVKh.png" alt="DNS"/>
 <img src="https://i.imgur.com/5mkyE7y.png" alt="DNS"/>
 <img src="https://i.imgur.com/9IMk7e8.png" alt="DNS"/>
@@ -91,7 +93,7 @@ This tutorial outlines the implementation of creating a Virtual Network and Virt
 
 
 
-<h2> Part 2:  Installing Active Directory Domain Services </h2>
+<h2>Installing Active Directory Domain Services </h2>
 
 <p> The first thing we are going to do is install active directory domain services. Open the DC-1 VM server manager should open automatically. If not open it now. On the welcome screen, click add roles and features. when the menu opens click next 3 times, we don’t need to do anything there. Select “Active Directory Domain Services. This will open a window asking you if you also want to install some prerequisites. Click add features. This will install everything needed for Active Directory. click next 3 more times, then click install. This may take some time but you can close the wizard. Once completed there will be an alert icon in the top right corner of server manager. click it then select “Promote this server to a domain controller” select add a new forest and name your domain. I will be going with mydomain.com as this is a test environment. Click next on the domain controller options we are going to leave everything alone except add a password. The password here is P@ssw0rd1. Do not use weak passwords in a real environment. Click next. We aren’t going to create a DNS delegation so click next again until you get to Prerequisites check if everything looks good go ahead and click install.  The domain will be created and the server will restart automatically </p>
 
@@ -130,4 +132,4 @@ This tutorial outlines the implementation of creating a Virtual Network and Virt
 <img src="https://i.imgur.com/TgCCy6B.png" alt="Join Domain"/>
 <img src="https://i.imgur.com/GRs2f9J.png" alt="Join Domain"/>
 
-
+<p> A Active Directory Tutorial will be comming soon</p>
