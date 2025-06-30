@@ -132,4 +132,4 @@ This tutorial outlines the implementation of creating a Virtual Network and Virt
 <img src="https://i.imgur.com/TgCCy6B.png" alt="Join Domain"/>
 <img src="https://i.imgur.com/GRs2f9J.png" alt="Join Domain"/>
 
-<p> A Active Directory Tutorial will be comming soon</p>
+
